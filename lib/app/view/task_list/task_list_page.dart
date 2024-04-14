@@ -36,10 +36,13 @@ Widget build(BuildContext context) {
           child: H1('Tareas')
           ),
         Expanded(
-          child: ListView.separated(
-          itemBuilder: (_, index) => Text(taskList[index].title), 
-          separatorBuilder: (_,__,) => const SizedBox(height: 16),
-          itemCount: taskList.length,)
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: ListView.separated(
+            itemBuilder: (_, index) => _TaskItem(taskList[index]), 
+            separatorBuilder: (_,__,) => const SizedBox(height: 16),
+            itemCount: taskList.length,),
+          )
         ),
       ],
 ),
@@ -51,16 +54,36 @@ floatingActionButton: FloatingActionButton(
       }
 }
 
-final taskList = [
+class _TaskItem extends StatelessWidget {
+  // ignore: unused_element
+  const _TaskItem(this.task, {super.key});
+
+  final Task task;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(21)
+      ),
+      child:Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 18),
+        child: Row(
+          children: [
+            Icon(Icons.check_box_outline_blank, 
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: 10,),
+            Text(task.title),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+final taskList = <Task> [
   Task('hacer la tarea'),
   Task('ver el partido'),
   Task('sacar a el perro'),
-  Task("elkin mkon"),
-  Task('que cule clase fulera esta pero weno estoy haciendo lo que puedo'),
   Task('breve'),
-  Task('breve'),
-  Task('breve'),
-  Task('breve'),
-  Task('breve'),
-  Task('breve'),Task('breve'),
 ];
