@@ -25,25 +25,31 @@ floatingActionButton: FloatingActionButton(
 
 class _TaskItem extends StatelessWidget {
   // ignore: unused_element
-  const _TaskItem(this.task, {super.key});
+  const _TaskItem(this.task, {super.key, this.ontap});
 
   final Task task;
+  final VoidCallback? ontap;
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(21)
-      ),
-      child:Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 18),
-        child: Row(
-          children: [
-            Icon(Icons.check_box_outline_blank, 
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: 10,),
-            Text(task.title),
-          ],
+    return GestureDetector(
+      onTap: ontap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(21)
+        ),
+        child:Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 18),
+          child: Row(
+            children: [
+              Icon(
+                task.done ? Icons.check_box : Icons.check_box_outline_blank , 
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: 10,),
+              Text(task.title),
+            ],
+          ),
         ),
       ),
     );
@@ -51,6 +57,7 @@ class _TaskItem extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
+  // ignore: unused_element
   const _Header({super.key});
 
   @override
@@ -79,6 +86,7 @@ class _Header extends StatelessWidget {
 }
 
 class _TaskList extends StatefulWidget {
+  // ignore: unused_element
   const _TaskList({super.key});
   @override
   State<_TaskList> createState() => _TaskListState();
@@ -102,7 +110,10 @@ class _TaskListState extends State<_TaskList> {
           const H1('Tareas'),
           Expanded(
             child: ListView.separated(
-              itemBuilder: (_, index) => _TaskItem(taskList[index]), 
+              itemBuilder: (_, index) => _TaskItem(taskList[index], ontap: () {
+                taskList[index].done = !taskList[index].done;
+                setState(() {});
+              },), 
               separatorBuilder: (_,__,) => const SizedBox(height: 16),
               itemCount: taskList.length,
             ),
