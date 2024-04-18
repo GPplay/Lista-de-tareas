@@ -16,11 +16,35 @@ Widget build(BuildContext context) {
       ],
 ),
 floatingActionButton: FloatingActionButton(
-              onPressed: () {},
+              onPressed:() => _showNewTaskModal(context),
               child: const Icon(Icons.add, size: 50),
             ),
           );
       }
+
+  void _showNewTaskModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context, 
+      isScrollControlled: true,
+      builder: (_) => const _NewTaskModal()
+    );
+  }
+}
+
+class _NewTaskModal extends StatelessWidget {
+  // ignore: unused_element
+  const _NewTaskModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(children: [
+        H1('nueva tarea'),
+        TextField(),
+        ElevatedButton(onPressed: (){}, child: Text('Guardar'), )
+      ]),
+    );
+  }
 }
 
 class _TaskItem extends StatelessWidget {
