@@ -38,10 +38,31 @@ class _NewTaskModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
-        H1('nueva tarea'),
-        TextField(),
-        ElevatedButton(onPressed: (){}, child: Text('Guardar'), )
+      padding: const EdgeInsets.symmetric(horizontal: 33,vertical: 23),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(21),
+        ),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+        const H1('nueva tarea'),
+        const SizedBox(height: 26,),
+        TextField(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            hintText: 'descripcion de la tarea',
+          ),
+        ),
+        const SizedBox(height: 26,),
+        ElevatedButton(onPressed: (){}, child: const Text('Guardar'), )
       ]),
     );
   }
