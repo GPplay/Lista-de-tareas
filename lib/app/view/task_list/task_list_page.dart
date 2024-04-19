@@ -26,15 +26,19 @@ floatingActionButton: FloatingActionButton(
     showModalBottomSheet(
       context: context, 
       isScrollControlled: true,
-      builder: (_) => const _NewTaskModal()
+      builder: (_) => _NewTaskModal(onTaskCreated: (Task task) { 
+        print(task.title);
+       },)
     );
   }
 }
 
 class _NewTaskModal extends StatelessWidget {
   // ignore: unused_element
-  const _NewTaskModal({super.key});
+  _NewTaskModal({super.key, required this.onTaskCreated});
 
+  final _controller = TextEditingController();
+  final void Function(Task task) onTaskCreated;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,6 +56,7 @@ class _NewTaskModal extends StatelessWidget {
         const H1('nueva tarea'),
         const SizedBox(height: 26,),
         TextField(
+          controller: _controller,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -62,7 +67,14 @@ class _NewTaskModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 26,),
-        ElevatedButton(onPressed: (){}, child: const Text('Guardar'), )
+        ElevatedButton(onPressed: (){
+          if(_controller.text.isNotEmpty){
+            // ignore: unused_local_variable
+            final task = Task(_controller.text);
+            onTaskCreated(task);
+            Navigator.of(context).pop();
+          }
+        }, child: const Text('Guardar'), )
       ]),
     );
   }
