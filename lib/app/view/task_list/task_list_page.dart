@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listaactividades/app/model/task.dart';
+import 'package:listaactividades/app/repository/task_repository.dart';
 import 'package:listaactividades/app/view/components/H1.dart';
 import 'package:listaactividades/app/view/components/decoration.dart';
 
@@ -11,7 +12,7 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListPageState extends State<TaskListPage> {
-  final taskList = <Task>[];
+  final TaskRepository taskRepository = TaskRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +22,28 @@ class _TaskListPageState extends State<TaskListPage> {
         children: [
           const _Header(),
           Expanded(
-              child: _TaskList(
-                taskList,
-                onTaskDoneChange: (task) {
-                  task.done = !task.done;
-                  setState(() {});
-                },
+              child: FutureBuilder<List<Task>>(
+                future: taskRepository.getTasks(),
+                builder: (context, snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if(!snapshot.hasData || snapshot.data!.isEmpty){
+                    return const Center(
+                      child: Text('no hay tareas'),
+                    );
+                  }
+                  return _TaskList(
+                    snapshot.data!,
+                    onTaskDoneChange: (task) {
+                      task.done = !task.done;
+                      taskRepository.saveTasks(snapshot.data!);
+                      setState(() {});
+                    },
+                  );
+                }
               )
           ),
         ],
@@ -38,12 +55,13 @@ class _TaskListPageState extends State<TaskListPage> {
     );
   }
 
-  void _showNewTaskModal(BuildContext context) {
+void _showNewTaskModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (_) => _NewTaskModal(
               onTaskCreated: (Task task) {
+                taskRepository.addTask(task);
                 setState(() {});
               },
             ));
