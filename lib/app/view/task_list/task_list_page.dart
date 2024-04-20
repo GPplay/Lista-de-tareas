@@ -44,9 +44,7 @@ class _TaskListPageState extends State<TaskListPage> {
         isScrollControlled: true,
         builder: (_) => _NewTaskModal(
               onTaskCreated: (Task task) {
-                setState(() {
-                  taskList.add(task);
-                });
+                setState(() {});
               },
             ));
   }
