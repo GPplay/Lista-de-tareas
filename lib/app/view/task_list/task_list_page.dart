@@ -3,11 +3,12 @@ import 'package:listaactividades/app/model/task.dart';
 import 'package:listaactividades/app/view/components/H1.dart';
 import 'package:listaactividades/app/view/components/decoration.dart';
 import 'package:listaactividades/app/view/task_list/task_provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 
 
 class TaskListPage extends StatelessWidget {
-  const TaskListPage({Key? key}) : super(key: key);
+  const TaskListPage({super.key});
   
   @override
   Widget build(BuildContext context) {
