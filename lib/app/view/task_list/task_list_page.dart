@@ -4,6 +4,7 @@ import 'package:listaactividades/app/view/components/H1.dart';
 import 'package:listaactividades/app/view/components/decoration.dart';
 import 'package:listaactividades/app/view/task_list/task_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 
 class TaskListPage extends StatelessWidget {
@@ -49,54 +50,59 @@ class _NewTaskModal extends StatelessWidget {
   // ignore: unused_element
   _NewTaskModal({super.key});
 
-  final _controller = TextEditingController();
-  
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 23),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(21),
+    return KeyboardVisibilityBuilder(
+      builder: (context, isKeyboardVisible) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Nueva tarea'),
           ),
-          color: Colors.white,
-        ),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const H1('nueva tarea'),
-              const SizedBox(
-                height: 26,
-              ),
-              TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  hintText: 'descripcion de la tarea',
+          body: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 23),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(21),
                 ),
+                color: Colors.white,
               ),
-              const SizedBox(
-                height: 26,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const H1('Nueva tarea'),
+                  const SizedBox(height: 26),
+                  TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      hintText: 'Descripción de la tarea',
+                    ),
+                  ),
+                  const SizedBox(height: 26),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_controller.text.isNotEmpty) {
+                        final task = Task(_controller.text);
+                        context.read<TaskProvider>().addNewTask(task);
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: const Text('Guardar'),
+                  )
+                ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_controller.text.isNotEmpty) {
-                    // ignore: unused_local_variable
-                    final task = Task(_controller.text);
-                    context.read<TaskProvider>().addNewTask(task);
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: const Text('Guardar'),
-              )
-            ]),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
