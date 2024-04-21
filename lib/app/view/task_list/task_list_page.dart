@@ -14,18 +14,20 @@ class TaskListPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create : (_)=> TaskProvider()..fetchTasks(),
       child: Scaffold(
-        body: Column(
+        body: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             _Header(),
             Expanded(
                 child:_TaskList()
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _showNewTaskModal(context),
-          child: const Icon(Icons.add, size: 50),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+              onPressed: () => _showNewTaskModal(context),
+              child: const Icon(Icons.add, size: 50),
+            )
         ),
       ),
     );
@@ -35,18 +37,20 @@ void _showNewTaskModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (_) => _NewTaskModal(
-              onTaskCreated: (Task task) {},
-            ));
+        builder: (_) => ChangeNotifierProvider.value(
+          value: context.read<TaskProvider>(),
+          child: _NewTaskModal(),
+        )
+      );
   }
 }
 
 class _NewTaskModal extends StatelessWidget {
   // ignore: unused_element
-  _NewTaskModal({super.key, required this.onTaskCreated});
+  _NewTaskModal({super.key});
 
   final _controller = TextEditingController();
-  final void Function(Task task) onTaskCreated;
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,7 +88,7 @@ class _NewTaskModal extends StatelessWidget {
                 if (_controller.text.isNotEmpty) {
                   // ignore: unused_local_variable
                   final task = Task(_controller.text);
-                  onTaskCreated(task);
+                  context.read<TaskProvider>().addNewTask(task);
                   Navigator.of(context).pop();
                 }
               },
