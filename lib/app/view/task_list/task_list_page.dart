@@ -54,48 +54,50 @@ class _NewTaskModal extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 23),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(21),
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 33, vertical: 23),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(21),
+          ),
+          color: Colors.white,
         ),
-        color: Colors.white,
-      ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const H1('nueva tarea'),
-            const SizedBox(
-              height: 26,
-            ),
-            TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                hintText: 'descripcion de la tarea',
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const H1('nueva tarea'),
+              const SizedBox(
+                height: 26,
               ),
-            ),
-            const SizedBox(
-              height: 26,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_controller.text.isNotEmpty) {
-                  // ignore: unused_local_variable
-                  final task = Task(_controller.text);
-                  context.read<TaskProvider>().addNewTask(task);
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Guardar'),
-            )
-          ]),
+              TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  hintText: 'descripcion de la tarea',
+                ),
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_controller.text.isNotEmpty) {
+                    // ignore: unused_local_variable
+                    final task = Task(_controller.text);
+                    context.read<TaskProvider>().addNewTask(task);
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: const Text('Guardar'),
+              )
+            ]),
+      ),
     );
   }
 }
